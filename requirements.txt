@@ -1,0 +1,23 @@
+# =============================================================================
+# requirements.txt
+# Pipeline NSA Java - SonarQube - Machine Learning
+# =============================================================================
+
+# --- MINIMO VIAVEL (roda o pipeline principal: SonarQube -> CSV -> ML) --------
+pandas
+scikit-learn
+numpy
+matplotlib
+requests
+
+# --- FALLBACK DE ALVO / EXTRAS (descomente se for usar) ----------------------
+# semgrep            # alvo alternativo quando os hotspots do SonarQube vem vazios
+# pydriller          # metricas de processo (historico Git)
+# lizard             # metricas estruturais nativas de fonte (sem build)
+
+# --- OPCIONAIS (modelos extras / balanceamento / explicabilidade) ------------
+# Os scripts ignoram em silencio se nao estiverem instalados.
+# xgboost
+# lightgbm
+# imbalanced-learn
+# shap

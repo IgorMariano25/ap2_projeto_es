@@ -31,12 +31,8 @@ import requests
 SONAR_HOST = os.environ.get("SONAR_HOST", "http://localhost:9000")
 SONAR_TOKEN = os.environ.get("SONAR_TOKEN")
 
-# Lista padrao (ajuste conforme a verificacao de tamanho da Secao 4 do prompt).
-REPOS = [
-    "ghidra", "emissary", "timely", "qonduit", "datawave", "fractalrabbit",
-    "datawave-query-service", "datawave-audit-service",
-    "datawave-authorization-service", "ghidra-lisa",
-]
+# Lista central de repositorios — fonte unica em config.py.
+from config import REPOS
 
 # Features estruturais (confiaveis sem build) -> entram no modelo.
 FEATURE_METRICS = [

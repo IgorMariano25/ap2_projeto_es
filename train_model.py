@@ -31,6 +31,19 @@ from sklearn.metrics import (
     roc_auc_score, confusion_matrix, ConfusionMatrixDisplay,
 )
 
+# XGBoost/LightGBM sao OPCIONAIS (decisao 7): se nao estiverem instalados, o
+# script ignora sem erro, atras de import protegido.
+try:
+    from xgboost import XGBClassifier
+    HAS_XGB = True
+except ImportError:
+    HAS_XGB = False
+try:
+    from lightgbm import LGBMClassifier
+    HAS_LGBM = True
+except ImportError:
+    HAS_LGBM = False
+
 DATA = Path("data/dataset.csv")
 FEATURES = [
     "ncloc", "complexity", "cognitive_complexity", "code_smells",
@@ -71,8 +84,9 @@ def main():
     print(f"Arquivos: {len(df)} | positivos (risco): {pos} "
           f"({100 * df['has_security_risk'].mean():.1f}%)")
     if df["has_security_risk"].nunique() < 2:
-        sys.exit("Apenas uma classe presente. Revise o conjunto de regras do SonarQube "
-                 "(hotspots vazios) antes de treinar.")
+        sys.exit("Apenas uma classe presente (provavel: hotspots/vulnerabilities vazios "
+                 "no modo sem build).\nRode 'python semgrep_target.py' para gerar o alvo "
+                 "alternativo (semgrep_findings) e use-o como rotulo antes de treinar.")
 
     X, y, groups = df[FEATURES], df["has_security_risk"], df["repo"]
 
@@ -96,6 +110,26 @@ def main():
     )
     lr.fit(Xtr, ytr)
     evaluate("Regressao Logistica (baseline)", yte, lr.predict(Xte), lr.predict_proba(Xte)[:, 1])
+
+    # --- modelos opcionais: so rodam se instalados (decisao 7); nunca quebram ---
+    extra = {}
+    if HAS_XGB:
+        pos = max(int(ytr.sum()), 1)
+        scale_pos_weight = (len(ytr) - pos) / pos  # trata desbalanceamento no XGBoost
+        extra["XGBoost (opcional)"] = XGBClassifier(
+            n_estimators=300, random_state=42, n_jobs=-1,
+            eval_metric="logloss", scale_pos_weight=scale_pos_weight,
+        )
+    if HAS_LGBM:
+        extra["LightGBM (opcional)"] = LGBMClassifier(
+            n_estimators=300, random_state=42, n_jobs=-1,
+            class_weight="balanced", verbose=-1,
+        )
+    for name, model in extra.items():
+        model.fit(Xtr, ytr)
+        evaluate(name, yte, model.predict(Xte), model.predict_proba(Xte)[:, 1])
+    if not extra:
+        print("\n[XGBoost/LightGBM nao instalados: etapa opcional ignorada (ok).]")
 
     # --- figura: matriz de confusao do RF ---
     ConfusionMatrixDisplay(

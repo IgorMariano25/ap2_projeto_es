@@ -1,0 +1,2 @@
+# Pasta onde run_sonarqube_nsa.py / semgrep_target.py clonam os repositorios.
+# O conteudo (clones) NAO e versionado; este .gitkeep so preserva a pasta no Git.

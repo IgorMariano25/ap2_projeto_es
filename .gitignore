@@ -1,0 +1,33 @@
+# --- Ambiente Python ---------------------------------------------------------
+venv/
+.venv/
+env/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# --- Repositorios clonados (externos; nao versionar; manter a pasta) ---------
+repos/*
+!repos/.gitkeep
+
+# --- Ferramentas externas pesadas (ver TOOLS_VERSIONS.md) --------------------
+developer-tools/
+
+# --- Saidas brutas / intermediarias do SonarScanner --------------------------
+.scannerwork/
+sonar_metrics_nsa.csv
+*.png
+
+# --- Saidas de dados ---------------------------------------------------------
+# Ignora tudo em data/ EXCETO o dataset final e o resumo descritivo,
+# que sao os artefatos versionados para o artigo.
+data/*
+!data/.gitkeep
+!data/dataset.csv
+!data/repo_summary.csv
+
+# --- SO / IDE ----------------------------------------------------------------
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

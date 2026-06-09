@@ -1,0 +1,2 @@
+# Pasta de saidas: data/<repo>.csv, data/dataset.csv e as figuras .png.
+# Apenas dataset.csv e repo_summary.csv sao versionados; este .gitkeep preserva a pasta.

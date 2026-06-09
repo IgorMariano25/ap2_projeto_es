@@ -71,22 +71,8 @@ SONAR_HOST = os.environ.get("SONAR_HOST", "http://localhost:9000")
 SONAR_TOKEN = os.environ.get("SONAR_TOKEN")  # obrigatório
 SONAR_JAVA_BINARIES = os.environ.get("SONAR_JAVA_BINARIES", "")  # ver AVISO
 
-ORG = "NationalSecurityAgency"
-
-# Lista verificada de candidatos Java (confirme tamanho/linguagem antes de fixar;
-# descarte os pequenos demais conforme os critérios do prompt do projeto).
-REPOS = {
-    "ghidra":                         f"https://github.com/{ORG}/ghidra.git",
-    "emissary":                       f"https://github.com/{ORG}/emissary.git",
-    "timely":                         f"https://github.com/{ORG}/timely.git",
-    "qonduit":                        f"https://github.com/{ORG}/qonduit.git",
-    "datawave":                       f"https://github.com/{ORG}/datawave.git",
-    "fractalrabbit":                  f"https://github.com/{ORG}/fractalrabbit.git",
-    "datawave-query-service":         f"https://github.com/{ORG}/datawave-query-service.git",
-    "datawave-audit-service":         f"https://github.com/{ORG}/datawave-audit-service.git",
-    "datawave-authorization-service": f"https://github.com/{ORG}/datawave-authorization-service.git",
-    "ghidra-lisa":                    f"https://github.com/{ORG}/ghidra-lisa.git",
-}
+# Lista central de repositorios — fonte unica em config.py (nome -> URL .git).
+from config import REPO_URLS as REPOS
 
 # Métricas consultadas. O script reporta, por repo, quais voltaram preenchidas
 # (= "consistentes"). Agrupadas por confiabilidade no modo SEM build.
